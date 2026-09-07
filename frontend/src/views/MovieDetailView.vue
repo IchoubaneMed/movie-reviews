@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue"
 
 import { getMovie } from "@/api/movies"
 import MovieEditDialog from "@/components/movies/MovieEditDialog.vue"
+import ActorEditDialog from "@/components/movies/ActorEditDialog.vue"
 const props = defineProps({
   id: {
     type: String,
@@ -83,15 +84,27 @@ onMounted(fetchMovie)
 
       <h2 class="mt-6">Actors</h2>
 
-      <v-list>
-        <v-list-item
-          v-for="actor in movie.actors"
-          :key="actor.id"
-        >
-          {{ actor.first_name }}
-          {{ actor.last_name }}
-        </v-list-item>
-      </v-list>
+      <v-list v-if="movie.actors.length">
+          <v-list-item
+            v-for="actor in movie.actors"
+            :key="actor.id"
+          >
+            <template #title>
+              {{ actor.first_name }} {{ actor.last_name }}
+            </template>
+
+            <template #append>
+              <ActorEditDialog
+                :actor="actor"
+                @updated="fetchMovie"
+              />
+            </template>
+          </v-list-item>
+        </v-list>
+
+        <p v-else>
+          No actors.
+        </p>
 
       <h2 class="mt-6">Reviews</h2>
 
