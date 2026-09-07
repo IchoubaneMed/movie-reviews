@@ -4,6 +4,7 @@ import { onMounted, ref } from "vue"
 import { getMovie } from "@/api/movies"
 import MovieEditDialog from "@/components/movies/MovieEditDialog.vue"
 import ActorEditDialog from "@/components/movies/ActorEditDialog.vue"
+import ReviewForm from "@/components/movies/ReviewForm.vue"
 const props = defineProps({
   id: {
     type: String,
@@ -120,6 +121,11 @@ onMounted(fetchMovie)
       <p v-else>
         No reviews yet.
       </p>
+
+      <ReviewForm
+        :movie-id="movie.id"
+        @created="fetchMovie"
+      />
     </template>
   </v-container>
 </template>
