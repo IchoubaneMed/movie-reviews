@@ -1,5 +1,5 @@
 from django.db.models import Avg
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 from .pagination import MoviePagination
 
 # Create your views here.
@@ -8,9 +8,15 @@ from .models import Movie
 from .serializers import (
     MovieDetailSerializer,
     MovieListSerializer,
+    MovieUpdateSerializer,
 )
 
-class MovieViewSet(viewsets.ReadOnlyModelViewSet):
+class MovieViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = (
         Movie.objects
         .prefetch_related("actors", "reviews")
@@ -22,4 +28,6 @@ class MovieViewSet(viewsets.ReadOnlyModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return MovieListSerializer
+        if self.action in ("update", "partial_update"):
+            return MovieUpdateSerializer
         return MovieDetailSerializer
