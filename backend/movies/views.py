@@ -4,8 +4,9 @@ from .pagination import MoviePagination
 
 # Create your views here.
 
-from .models import Movie
+from .models import Actor, Movie
 from .serializers import (
+    ActorSerializer,
     MovieDetailSerializer,
     MovieListSerializer,
     MovieUpdateSerializer,
@@ -31,3 +32,12 @@ class MovieViewSet(
         if self.action in ("update", "partial_update"):
             return MovieUpdateSerializer
         return MovieDetailSerializer
+    
+
+
+class ActorViewSet(
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Actor.objects.all()
+    serializer_class = ActorSerializer
