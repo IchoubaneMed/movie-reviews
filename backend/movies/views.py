@@ -1,5 +1,6 @@
 from django.db.models import Avg
 from rest_framework import viewsets
+from .pagination import MoviePagination
 
 # Create your views here.
 
@@ -15,6 +16,8 @@ class MovieViewSet(viewsets.ReadOnlyModelViewSet):
         .prefetch_related("actors", "reviews")
         .annotate(average_grade=Avg("reviews__grade"))
     )
+
+    pagination_class = MoviePagination
 
     def get_serializer_class(self):
         if self.action == "list":
