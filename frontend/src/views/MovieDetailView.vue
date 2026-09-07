@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue"
 
 import { getMovie } from "@/api/movies"
+import MovieEditDialog from "@/components/movies/MovieEditDialog.vue"
 const props = defineProps({
   id: {
     type: String,
@@ -54,7 +55,14 @@ onMounted(fetchMovie)
         Back to movies
       </v-btn>
 
-      <h1>{{ movie.title }}</h1>
+      <div class="d-flex align-center justify-space-between mb-4">
+        <h1>{{ movie.title }}</h1>
+
+        <MovieEditDialog
+          :movie="movie"
+          @updated="fetchMovie"
+        />
+      </div>
 
       <p class="my-4">
         {{ movie.description }}
